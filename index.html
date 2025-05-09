@@ -1,0 +1,239 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contorno Verde - Consultoria em Fundos e Eficiência Operacional</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navegação -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.jpg" alt="Logo Contorno Verde" class="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">Sobre Nós</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">Galeria</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero text-white text-center py-5">
+        <div class="container">
+            <h1>Transformamos Oportunidades em Resultados Reais</h1>
+            <p>Especialistas em captação de fundos e otimização operacional desde 2010</p>
+            <a href="#contact" class="btn btn-light">Agende uma Consultoria Gratuita</a>
+        </div>
+    </section>
+
+    <!-- Sobre Nós -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Sobre Nós</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Fundada em 2010, a Contorno Verde, Lda. é uma consultora especializada na aquisição de fundos para investimento, promovendo o desenvolvimento económico e social. Com mais de 1800 candidaturas submetidas em áreas como indústria, serviços, agricultura, I&D, comércio e recursos humanos, consolidamos parcerias estratégicas em finanças, digitalização, marketing e comunicação.</p>
+                    <p>Com uma trajetória de excelência, somos referência no apoio ao crescimento sustentável das empresas, oferecendo soluções personalizadas com impacto real.</p>
+                </div>
+                <div class="col-md-6">
+                    <img src="images/equipe.jpg" alt="Equipe Contorno Verde" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços -->
+    <section id="services" class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Nossos Serviços</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Contabilidade e Gestão Financeira</h5>
+                            <p class="card-text">Apoio especializado em contabilidade e consultadoria de gestão financeira.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Gestão de Incentivos e Projetos</h5>
+                            <p class="card-text">Identificação e gestão de incentivos financeiros para eficiência e rentabilidade.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Digitalização do Negócio</h5>
+                            <p class="card-text">Soluções de e-commerce, marketing e gestão de redes sociais.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Internacionalização</h5>
+                            <p class="card-text">Suporte aos processos de expansão internacional das empresas.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Redução de Custos</h5>
+                            <p class="card-text">Estratégias para redução efetiva de custos operacionais.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Otimização Energética</h5>
+                            <p class="card-text">Soluções sustentáveis para redução de consumo energético.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria -->
+    <section id="gallery" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Galeria</h2>
+            <!-- Carrossel de Imagens -->
+            <div id="imageCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="images/galeria1.jpg" class="d-block w-100" alt="Imagem de Consultoria 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/galeria2.jpg" class="d-block w-100" alt="Imagem de Consultoria 2">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Seguinte</span>
+                </button>
+            </div>
+            <!-- Vídeos -->
+            <h3 class="text-center mb-4">Vídeos Institucionais</h3>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <video controls class="w-100">
+                        <source src="videos/video1.mp4" type="video/mp4">
+                        O seu navegador não suporta o elemento de vídeo.
+                    </video>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <video controls class="w-100">
+                        <source src="videos/video2.mp4" type="video/mp4">
+                        O seu navegador não suporta o elemento de vídeo.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contact" class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Contacto</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Informações de Contacto</h4>
+                    <p>📍 Travessa da Escola n.º 112 – 1º A, 4750-463 Barcelos, Braga</p>
+                    <p>📞 253 101 655 / 962 224 385</p>
+                    <p>📠 253 834 063</p>
+                    <p>📧 contornoverde.geral@gmail.com</p>
+                    <p>🌐 www.contornoverde.pt</p>
+                </div>
+                <div class="col-md-6">
+                    <h4>Envie a sua Mensagem</h4>
+                    <form id="contactForm">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mensagem" class="form-label">Mensagem</label>
+                            <textarea class="form-control" id="mensagem" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>© 2024 Contorno Verde, Lda. Todos os direitos reservados.</p>
+        <p><a href="#politica-privacidade" class="text-white">Política de Privacidade</a> | <a href="#termos" class="text-white">Termos de Serviço</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
