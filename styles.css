@@ -1,0 +1,39 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+}
+
+.logo {
+    height: 50px;
+}
+
+.card {
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+#contactForm .form-control {
+    border-radius: 0;
+}
+
+footer {
+    background-color: #343a40;
+}
+
+.carousel img {
+    max-height: 500px;
+    object-fit: cover;
+}
+
+video {
+    max-height: 300px;
+}
